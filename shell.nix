@@ -6,7 +6,7 @@ let
   '';
   pkgs = import <nixpkgs> {};
   drv = pkgs.callPackage ./. {};
-  devTools = with pkgs; [ git gdb ];
+  devTools = with pkgs; [ git gdb racket ];
 in
 pkgs.stdenv.lib.overrideDerivation drv (orig: { buildInputs = orig.buildInputs ++ devTools;
                                                 shellHook = env; })
