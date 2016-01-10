@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   buildPhase = ''
     # can't use raco exe in NixOS as of now.
     # see https://github.com/NixOS/nixpkgs/issues/11698
-    PLTCOLLECTS=:${rackme-lib}/lib raco make main.rkt
+    PLTCOLLECTS=:${rackme-lib}/lib raco make --no-deps main.rkt
   '';
 
   installPhase = ''

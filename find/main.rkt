@@ -2,4 +2,8 @@
 
 (require rackme)
 
-(my-test "ok")
+(define window (get-current-window))
+(define selection (address-of-dot window))
+
+(println (format "start of selection: ~a" (range-start selection)))
+(println (format "end of selection: ~a" (range-end selection)))

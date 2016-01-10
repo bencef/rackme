@@ -15,6 +15,6 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/lib/rackme
-    mv main.rkt compiled $out/lib/rackme
+    mv *.rkt $out/lib/rackme
   '';
 }
