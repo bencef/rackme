@@ -1,8 +1,10 @@
 #lang racket/base
 
 (require (for-syntax
-           syntax/parse
-           racket/base))
+          racket/base
+          racket/syntax
+          syntax/parse)
+         racket/string)
 
 (provide with-open-acme-files
          acme-write
@@ -15,19 +17,40 @@
   (define-syntax-class file-binding
     (pattern (name:id
               path:expr
-              mode:open-mode)))
+              mode:open-mode)
+             #:attr form
+             (let* ([m (syntax->datum #'mode)]
+                    [wmode (case m
+                             [('wa 'rwa) 'append]
+                             [else 'truncate])])
+               (case m
+                 [('r) #'(cons (open-input-file path
+                                                #:mode 'binary) #f)]
+                 [('w 'wa) #`(cons #f (open-output-file path
+                                                        #:mode 'binary
+                                                        #:exists '#,wmode))]
+                 [('rw 'rwa) #`(let-values ([(in out) (open-input-output-file path
+                                                                              #:mode 'binary
+                                                                              #:exists '#,wmode)])
+                                 (cons in out))]))))
   (syntax-parse stx
-    [(_ (bindings:file-binding ...+) body:expr ...+)
+    [(_ (binding:file-binding ...+) body:expr ...+)
      ;; use open-input-output-file
      ;; use case for mode
-     (datum->syntax stx '(range 1 2))]))
+     #'(parameterize ([current-custodian (make-custodian)])
+         (let ([binding.name binding.form] ...)
+           body ...))]))
 
 (define (acme-read handle length)
-  #f)
+  (read-string length (car handle)))
 
 (define (acme-write handle data)
-  #f)
+  (define port (cdr handle))
+  (write-string data port)
+  (flush-output port))
 
 (define (acme-read-num handle)
-  (define num-field-len 11)
-  (string->number (read handle num-field-len)))
+  (define num-field-len 12)
+  (define str (acme-read handle num-field-len))
+  (define num (string-trim str))
+  (string->number num))
