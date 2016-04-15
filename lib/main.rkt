@@ -6,6 +6,11 @@
 (provide get-ns
          get-current-window
          address-of-dot
+         ;; TODO provide-out
+         with-open-acme-files
+         acme-read
+         acme-read-num
+         acme-write
          (struct-out range))
 
 (define (get-ns)
