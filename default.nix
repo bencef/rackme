@@ -3,7 +3,7 @@
 let
   rackme-lib = callPackage ./lib {};
   find = callPackage ./find { inherit rackme-lib; };
-  env = buildEnv {
+  env = buildEnv rec {
     name = "rackme";
     paths = [ find ];
 
@@ -12,7 +12,7 @@ let
       if [ -L $out/bin ]; then
         rm $out/bin
         mkdir $out/bin
-        for prog in ${find}; do
+        for prog in ${stdenv.lib.concatStrings paths}; do
           for i in $prog/bin/*; do
             ln -s $i $out/bin
           done
