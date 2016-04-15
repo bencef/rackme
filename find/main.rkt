@@ -6,5 +6,5 @@
 (define window (get-current-window))
 (define selection (address-of-dot (format "~a/~a" ns window)))
 
-(println (format "start of selection: ~a" (range-start selection)))
-(println (format "end of selection: ~a" (range-end selection)))
+(displayln (format "start of selection: ~a" (range-start selection)))
+(displayln (format "end of selection: ~a" (range-end selection)))
