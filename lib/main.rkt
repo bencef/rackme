@@ -26,6 +26,6 @@
   (with-open-acme-files ([addr (format "~a/addr" w) 'r]
                          [ctl (format "~a/ctl" w) 'wa])
     (acme-write ctl "addr=dot")
-    (let ([start (acme-read-num addr)]
-          [end   (acme-read-num addr)])
+    (let* ([start (acme-read-num addr)]
+           [end   (acme-read-num addr)])
       (range start end))))
