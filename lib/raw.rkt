@@ -1,9 +1,8 @@
 #lang racket/base
 
-(require (for-syntax
-          racket/base
-          racket/syntax
-          syntax/parse)
+(require (for-syntax racket/base
+                     racket/syntax
+                     syntax/parse)
          racket/string)
 
 (provide with-open-acme-files
@@ -35,8 +34,6 @@
                                  (cons in out))]))))
   (syntax-parse stx
     [(_ (binding:file-binding ...+) body:expr ...+)
-     ;; use open-input-output-file
-     ;; use case for mode
      #'(parameterize ([current-custodian (make-custodian)])
          (let ([binding.name binding.form] ...)
            body ...))]))
